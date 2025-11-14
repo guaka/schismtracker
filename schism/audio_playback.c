@@ -1353,7 +1353,10 @@ static void _schism_midi_out_raw(song_t *csf, const unsigned char *data, uint32_
 #endif
 
 	//if (!_disko_writemidi(data,len,pos)) -- not needed
-		midi_send_buffer(data,len,pos);
+	// pos is buffer_count (full tick length in samples at mix_frequency)
+	// For MIDI-only tracks, send events immediately - no audio synchronization needed
+	// MIDI events are generated at the correct musical time during tick processing
+	midi_send_now(data, len);
 }
 
 
